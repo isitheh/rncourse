@@ -7,9 +7,8 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, TextInput, Button} from 'react-native';
+import {Platform, StyleSheet, Text, View} from 'react-native';
 
-import ListItem from './src/components/ListItem/ListItem';
 import PlaceList from './src/components/PlaceList/PlaceList';
 import PlaceInput from './src/components/PlaceInput/PlaceInput';
 
@@ -22,52 +21,24 @@ const instructions = Platform.select({
 
 export default class App extends Component<Props> {
   state = {
-    placeName: '',
     places: []
-  }
+  };
 
-  placeNameChangedHandler = val => {
-    this.setState({
-      placeName: val
-    });
-  }
-
-  placeSubmitHandler = () => {
-    if(this.state.placeName.trim() === "") {
-      //Do not let user add an empty place
-      return;
-    }
-
+  placeAddedHandler = placeName => {
     this.setState(prevState => {
       return {
-        places: prevState.places.concat(prevState.placeName)
+        places: prevState.places.concat(placeName)
       };
     });
   };
 
   render() {
-    const placesOutput = this.state.places.map((place, i) => (
-      <ListItem key={i} placeName={place}/>
-    ));
-
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>React Native App: RN Course!</Text>
         <Text style={styles.instructions}>{instructions}</Text>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.textInput}
-            value={this.state.text}
-            onChangeText={this.placeNameChangedHandler}
-            placeholder="An  Awesome Place"
-          />
-          <Button
-            style={styles.placeButton}
-            title="Add"
-            onPress={this.placeSubmitHandler}
-          />
-        </View>
-        <View style={styles.listContainer}>{placesOutput}</View>
+        <PlaceInput onPlaceAdded={this.placeAddedHandler}/>
+        <PlaceList places={this.state.places}/>
       </View>
     );
   }
@@ -81,13 +52,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
-  inputContainer: {
-    width: '100%',
-    padding: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
   welcome: {
     fontSize: 20,
     textAlign: 'center',
@@ -98,13 +62,4 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 5,
   },
-  placeInput: {
-    width: '70%',
-  },
-  placeButton: {
-    width: '30%',
-  },
-  listContainer: {
-    width: '100%'
-  }
 });
