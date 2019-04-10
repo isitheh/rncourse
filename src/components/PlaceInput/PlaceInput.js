@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
 
 class placeInput extends Component<props>{
   render() {
