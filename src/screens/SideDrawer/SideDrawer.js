@@ -21,6 +21,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     flex: 1
   },
-})
+});
 
 export default SideDrawer;
