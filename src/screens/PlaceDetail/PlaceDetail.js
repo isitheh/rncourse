@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, Platform, Dimensions }
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { deletePlace } from '../../store/actions/index/';
+import MapView from 'react-native-maps';
 
 class PlaceDetail extends Component {
   state = {
@@ -32,11 +33,29 @@ class PlaceDetail extends Component {
   render () {
     return (
       <View style={styles.container}>
-        <View>
-          <Image
-            style={this.state.viewMode === "portrait" ? styles.placeImage: styles.placeImageResponsive}
-            source={this.props.selectedPlace.image}
-          />
+        <View style={styles.placeDetails}>
+          <View style={styles.subContainer}>
+            <Image
+              style={this.state.viewMode === "portrait" ? styles.placeImage: styles.placeImageResponsive}
+              source={this.props.selectedPlace.image}
+            />
+          </View>
+          <View style={styles.subContainer}>
+            <MapView
+              initialRegion={{
+                ...this.props.selectedPlace.location,
+                latitudeDelta: 0.0122,
+                longitudeDelta:
+                  Dimensions.get("window").width /
+                  Dimensions.get("window").height *
+                  0.0122
+              }}
+              style={styles.map}
+              style={this.state.viewMode === "portrait" ? styles.map: styles.mapResponsive}
+            >
+              <MapView.Marker coordinate={this.props.selectedPlace.location}/>
+            </MapView>
+          </View>
           <Text style={styles.placeName}>{this.props.selectedPlace.name}</Text>
         </View>
         <View>
@@ -64,6 +83,14 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 200
   },
+  map: {
+    //...StyleSheet.absoluteFillObject,
+    width: "100%",
+    height: 200
+  },
+  placeDetails: {
+    //flex: 2
+  },
   placeName: {
     fontWeight: "bold",
     textAlign:  "center",
@@ -76,9 +103,16 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   placeImageResponsive: {
-    width: "80%",
-    height: 150
+    width: "100%",
+    height: 100
   },
+  mapResponsive: {
+    width: "100%",
+    height: 100
+  },
+  subContainer: {
+    //flex: 1,
+  }
 });
 
 
