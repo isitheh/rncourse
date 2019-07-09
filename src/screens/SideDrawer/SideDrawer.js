@@ -51,4 +51,4 @@ const mapDispatchToProps = dispatch => {
   }
 };
 
-export default connect(null, authLogout)(SideDrawer);
+export default connect(null, mapDispatchToProps)(SideDrawer);

@@ -13,32 +13,37 @@ class SharePlaceScreen extends Component {
     navBarButtonColor: "orange"
   }
 
-  state = {
-    controls: {
-      placeName: {
-        value: "",
-        valid: false,
-        touched: false,
-        validationRules: {
-          notEmpty: true
-        }
-      },
-      location: {
-        value: null,
-        valid: false
-      },
-      image: {
-        value: null,
-        valid: false
-      }
-    }
-
-  };
-
   constructor(props) {
     super(props);
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
   }
+
+  componentWillMount() {
+    this.reset();
+  }
+
+  reset = () => {
+    this.setState({
+      controls: {
+        placeName: {
+          value: "",
+          valid: false,
+          touched: false,
+          validationRules: {
+            notEmpty: true
+          }
+        },
+        location: {
+          value: null,
+          valid: false
+        },
+        image: {
+          value: null,
+          valid: false
+        }
+      }
+    });
+  };
 
   onNavigatorEvent = event => {
     if (event.type === "NavBarButtonPress") {
@@ -86,6 +91,9 @@ class SharePlaceScreen extends Component {
       this.state.controls.location.value,
       this.state.controls.image.value
     );
+    this.reset();
+    this.imagePicker.reset();
+    this.locationPicker.reset();
   }
 
   imagePickedHandler = image => {
@@ -127,8 +135,8 @@ class SharePlaceScreen extends Component {
               Share a Place With Us!
             </HeadingText>
           </MainText>
-          <PickImage onImagePicked={this.imagePickedHandler}/>
-          <PickLocation onLocationPick={this.locationPickedHandler}/>
+          <PickImage onImagePicked={this.imagePickedHandler} ref={ref => (this.imagePicker = ref)}/>
+          <PickLocation onLocationPick={this.locationPickedHandler} ref={ref => (this.locationPicker = ref)}/>
           <PlaceInput
             placeName={this.state.controls.placeName}
             onChangeText={this.placeNameChangedHandler}
